@@ -17,7 +17,9 @@ IApp& GetApp()
 // https://github.com/Admer456/FoxGLBox/blob/master/renderer/src/Backends/OpenGL45/Renderer.cpp#L25
 const char* glTranslateError( GLenum error )
 {
-	struct GLErrorInfo { int glEnum; const char* glString; };
+	// Originally, it was int glEnum, but GCC complains about narrowing conversions
+	// This way is more correct anyway
+	struct GLErrorInfo { GLenum glEnum; const char* glString; };
 
 	constexpr GLErrorInfo errorEnumStrings[] =
 	{
@@ -111,6 +113,7 @@ void App::RunFrame()
 			run = false;
 			break;
 		}
+		// TODO: ImGui buttons'n'stuff so we can select other shaders
 		else if ( ev.type == SDL_KEYDOWN )
 		{
 			if ( ev.key.keysym.scancode == SDL_SCANCODE_R )
@@ -126,23 +129,20 @@ void App::RunFrame()
 	glClearColor( 0.05f, 0.15f, 0.15f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+	// Use the shader
 	glUseProgram( gpuProgramHandle );
 	
+	// Update the time
 	glUniform1f( shaderTimeHandle, time );
 
+	// Bind the textures
 	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D, textureHandle );
 	glActiveTexture( GL_TEXTURE1 );
 	glBindTexture( GL_TEXTURE_2D, paletteTextureHandle );
 
-	if ( textureHandle == paletteTextureHandle )
-	{
-		run = false;
-		std::cout << "textureHandle == paletteTextureHandle???" << std::endl;
-	}
-
+	// Render go brr
 	glBindVertexArray( vertexArrayHandle );
-
 	glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr );
 
 	SDL_GL_SwapWindow( window );

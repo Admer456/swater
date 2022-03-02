@@ -4,9 +4,14 @@
 class IApp
 {
 public:
-    static constexpr int Success = 0;
-    static constexpr int Failure = -1;
-
+    // Linux doesn't like the static constexpr int approach,
+    // so use enums here
+    enum
+    {
+        Failure = -1,
+        Success = 0
+    };
+    
     virtual int Run() = 0;
 };
 

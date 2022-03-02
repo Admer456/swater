@@ -32,6 +32,11 @@ endif()
 
 ## OpenGL
 find_package( OpenGL REQUIRED )
+if ( WIN32 )
+    set( OPENGL_LIBRARIES opengl32.lib )
+elseif( UNIX )
+    set( OPENGL_LIBRARIES GL )
+endif()
 
 ## glew
 set( GLEW_INCLUDE_DIR
@@ -69,7 +74,7 @@ target_include_directories( SWater PRIVATE
     ${STB_IMAGE_INCLUDE_DIR} )
 
 ## Link against SDL2 libs
-target_link_libraries( SWater PRIVATE ${SDL2_LIBRARIES} opengl32 )
+target_link_libraries( SWater PRIVATE ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} )
 
 ## Output here
 install( TARGETS SWater

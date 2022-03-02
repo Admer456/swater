@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <array>
+#include <cstdint>
 
-//using PaletteEntry = std::array<unsigned char, 3U>;
 using PaletteEntry = uint8_t[3];
 using PaletteBuffer = std::array<PaletteEntry, 256U>;
 using TextureBuffer = std::vector<unsigned char>;
