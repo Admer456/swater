@@ -144,6 +144,8 @@ void App::RunFrame()
 	glUniform1f( shaderTimeHandle, time );
 	glUniform1i( upperIndexHandle, upperIndex );
 	glUniform1i( lowerIndexHandle, lowerIndex );
+	glUniform1i( textureWidthHandle, texture.GetWidth() );
+	glUniform1i( textureHeightHandle, texture.GetHeight() );
 
 	// Bind the textures
 	glActiveTexture( GL_TEXTURE0 );
@@ -286,6 +288,9 @@ bool App::CreateShaders()
 
 	upperIndexHandle = glGetUniformLocation( gpuProgramHandle, "gUpperIndex" );
 	lowerIndexHandle = glGetUniformLocation( gpuProgramHandle, "gLowerIndex" );
+
+	textureWidthHandle = glGetUniformLocation( gpuProgramHandle, "gTextureWidth" );
+	textureHeightHandle = glGetUniformLocation( gpuProgramHandle, "gTextureHeight" );
 
 	return true;
 }

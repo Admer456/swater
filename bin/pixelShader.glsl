@@ -9,6 +9,8 @@ uniform sampler2D paletteMap;
 uniform float gTime;
 uniform int gUpperIndex;
 uniform int gLowerIndex;
+uniform int gTextureWidth;
+uniform int gTextureHeight;
 
 out vec4 outColor;
 
@@ -27,12 +29,12 @@ float Index_I2F( int index )
 // Must know texture dimensions beforehand! (todo: change this with a simple uniform)
 ivec2 Coord_F2I( vec2 coord )
 {
-    return ivec2( int(coord.x * 128.0), int(coord.y * 128.0) );
+    return ivec2( int(coord.x * float(gTextureWidth)), int(coord.y * float(gTextureHeight)) );
 }
 
 vec2 Coord_I2F( ivec2 coord )
 {
-    return vec2( float(coord.x / 128.0), float(coord.y / 128.0) );
+    return vec2( float(coord.x / float(gTextureWidth)), float(coord.y / float(gTextureHeight)) );
 }
 
 // Sample an index from this integer coordinate
@@ -74,9 +76,9 @@ int FixIndex( int index )
 // E.g. if you wanna get a scrolling vertical texture, that moves 1 pixel down every 0.1 seconds, and the texture dimension is 128 pixels, you go:
 // currentTexCoord + ivec2(0, TimeFraction( gTime, 10.0, 128 ))
 // Note: the current design assumes we got a 128x128 texture
-int TimeFraction( const float time, const float updateRate, const int numFrames )
+int TimeFraction( const float time, const float updateRate )
 {
-    return int( time * float(numFrames) / updateRate ) % numFrames;
+    return int( time * updateRate );
 }
 
 void main()
@@ -85,7 +87,7 @@ void main()
     ivec2 currentIntCoord = Coord_F2I( fragmentCoord );
     // timeOffset has a range between 0 and 127, and it updates through time like a sawtooth
     // 128 is currently hardcoded but will be replaced with the texture's width
-    int timeOffset = TimeFraction( gTime, 8.0, 128 );
+    int timeOffset = TimeFraction( gTime, 20.0 );
 
     // Static water
     int mainIndex = SampleIndex( currentIntCoord );

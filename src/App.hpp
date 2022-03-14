@@ -51,6 +51,9 @@ private:
     GLuint upperIndexHandle{ 0 };
     GLuint lowerIndexHandle{ 0 };
 
+    GLuint textureWidthHandle{ 0 };
+    GLuint textureHeightHandle{ 0 };
+
     GLuint vertexBufferHandle{ 0 };
     GLuint vertexArrayHandle{ 0 };
     GLuint indexBufferHandle{ 0 };
