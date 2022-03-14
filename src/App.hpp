@@ -46,6 +46,11 @@ private:
     GLuint paletteTextureHandle{ 0 };
     GLuint textureHandle{ 0 };
 
+    int upperIndex{ 192 };
+    int lowerIndex{ 20 };
+    GLuint upperIndexHandle{ 0 };
+    GLuint lowerIndexHandle{ 0 };
+
     GLuint vertexBufferHandle{ 0 };
     GLuint vertexArrayHandle{ 0 };
     GLuint indexBufferHandle{ 0 };

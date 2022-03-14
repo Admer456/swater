@@ -140,8 +140,10 @@ void App::RunFrame()
 	// Use the shader
 	glUseProgram( gpuProgramHandle );
 	
-	// Update the time
+	// Update the time and other things
 	glUniform1f( shaderTimeHandle, time );
+	glUniform1i( upperIndexHandle, upperIndex );
+	glUniform1i( lowerIndexHandle, lowerIndex );
 
 	// Bind the textures
 	glActiveTexture( GL_TEXTURE0 );
@@ -175,6 +177,9 @@ void App::RunGui()
 	{
 		ReloadShaders();
 	}
+
+	ImGui::SliderInt( "Upper index", &upperIndex, 0, 255 );
+	ImGui::SliderInt( "Lower index", &lowerIndex, 0, 255 );
 
 	ImGui::End();
 
@@ -278,6 +283,9 @@ bool App::CreateShaders()
 
 	glUniform1i( diffuseMapHandle, 0 );
 	glUniform1i( paletteMapHandle, 1 );
+
+	upperIndexHandle = glGetUniformLocation( gpuProgramHandle, "gUpperIndex" );
+	lowerIndexHandle = glGetUniformLocation( gpuProgramHandle, "gLowerIndex" );
 
 	return true;
 }

@@ -7,6 +7,8 @@ in vec2 fragmentCoord;
 uniform sampler2D diffuseMap;
 uniform sampler2D paletteMap;
 uniform float gTime;
+uniform int gUpperIndex;
+uniform int gLowerIndex;
 
 out vec4 outColor;
 
@@ -96,10 +98,10 @@ void main()
 
     // Draw the static texture as-is
     outColor.rgb = SamplePrimary( currentIntCoord, 0 );
-
+    
     // This is the "fake ripple" algorithm
     // Without reverse-engineering GoldSRC's software renderer, I can't do much else here!
-    if ( bool(avgIndex & 48) && avgIndex > 20 && avgIndex < 192 )
+    if ( bool(avgIndex & 48) && avgIndex > gLowerIndex && avgIndex < gUpperIndex )
         outColor.rgb = SampleColor( avgIndex );
 
     // Uncomment this to debug the mixing indices
