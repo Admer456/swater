@@ -1,11 +1,14 @@
 
 #include <iostream>
-
-#include "SDL.h"
-#include "TextureProvider.hpp"
-#include "App.hpp"
 #include <sstream>
 #include <fstream>
+
+#include "SDL.h"
+#include "imgui.h"
+#include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_sdl.h"
+#include "TextureProvider.hpp"
+#include "App.hpp"
 
 IApp& GetApp()
 {
@@ -86,6 +89,9 @@ int App::Run()
 		}
 	}
 
+	// GUI is optional, you can reload shaders with R
+	CreateGui();
+
 	if ( !CreateShaders() )
 		return Shutdown( Failure );
 
@@ -121,6 +127,8 @@ void App::RunFrame()
 				ReloadShaders();
 			}
 		}
+
+		ImGui_ImplSDL2_ProcessEvent( &ev );
 	}
 
 	static float time = 0.0f;
@@ -145,7 +153,58 @@ void App::RunFrame()
 	glBindVertexArray( vertexArrayHandle );
 	glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr );
 
+	RunGui();
+
 	SDL_GL_SwapWindow( window );
+}
+
+void App::RunGui()
+{
+	if ( !initialisedGui )
+	{
+		return;
+	}
+
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin( "Settings" );
+
+	if ( ImGui::Button( "Reload shaders" ) )
+	{
+		ReloadShaders();
+	}
+
+	ImGui::End();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData( ImGui::GetDrawData() );
+}
+
+bool App::CreateGui()
+{
+	guiContext = ImGui::CreateContext();
+
+	auto& io = ImGui::GetIO();
+
+	io.DisplaySize.x = 1024.0f;
+	io.DisplaySize.y = 1024.0f;
+
+	if ( !ImGui_ImplOpenGL3_Init( "#version 330 core" ) )
+	{
+		std::cout << "App::CreateGui: failed to initialise OpenGL 3 backend" << std::endl;
+		return false;
+	}
+
+	if ( !ImGui_ImplSDL2_InitForOpenGL( window, glContext ) )
+	{
+		std::cout << "App::Creategui: failed to initialise SDL2 backend" << std::endl;
+		return false;
+	}
+
+	initialisedGui = true;
+	return true;
 }
 
 // Just a vertex and fragment shader, nothing special
@@ -466,6 +525,13 @@ const char* App::GetShaderError( GLuint vs, GLuint fs ) const
 int App::Shutdown( const int& errorCode )
 {
 	SDL_Quit();
+
+	if ( initialisedGui )
+	{
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplSDL2_Shutdown();
+		ImGui::DestroyContext( guiContext );
+	}
 
 	return errorCode;
 }

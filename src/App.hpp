@@ -13,7 +13,9 @@ public:
 
 private:
     void RunFrame();
+    void RunGui();
 
+    bool CreateGui();
     bool CreateShaders();
     bool ReloadShaders();
     bool CreateTexture();
@@ -26,6 +28,8 @@ private:
 private:
     SDL_Window* window{ nullptr };
     SDL_GLContext glContext{ nullptr };
+    ImGuiContext* guiContext{ nullptr };
+    bool initialisedGui{ false };
 
     bool run{ true };
 
