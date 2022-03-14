@@ -48,6 +48,25 @@ set( GLEW_SOURCES
 set( STB_IMAGE_INCLUDE_DIR 
     ${THE_ROOT}/extern/stb_image )
 
+## ImGui
+set( IMGUI_INCLUDE_DIR
+    ${THE_ROOT}/extern/imgui )
+set( IMGUI_SOURCES
+    ${THE_ROOT}/extern/imgui/imconfig.h  
+    ${THE_ROOT}/extern/imgui/imgui.cpp  
+    ${THE_ROOT}/extern/imgui/imgui.h  
+    ${THE_ROOT}/extern/imgui/imgui_draw.cpp 
+    ${THE_ROOT}/extern/imgui/imgui_tables.cpp 
+    ${THE_ROOT}/extern/imgui/imgui_widgets.cpp 
+    ${THE_ROOT}/extern/imgui/imstb_rectpack.h 
+    ${THE_ROOT}/extern/imgui/imstb_textedit.h
+    ${THE_ROOT}/extern/imgui/imstb_truetype.h 
+    ${THE_ROOT}/extern/imgui/backends/imgui_impl_opengl3_loader.h 
+    ${THE_ROOT}/extern/imgui/backends/imgui_impl_opengl3.cpp 
+    ${THE_ROOT}/extern/imgui/backends/imgui_impl_opengl3.h 
+    ${THE_ROOT}/extern/imgui/backends/imgui_impl_sdl.cpp 
+    ${THE_ROOT}/extern/imgui/backends/imgui_impl_sdl.h )
+
 ## Set up our main thing
 
 set( THE_SOURCES 
@@ -58,6 +77,7 @@ set( THE_SOURCES
     ${THE_ROOT}/src/TextureProvider.hpp 
     ${THE_ROOT}/src/TextureProvider.cpp 
     ${GLEW_SOURCES} ## glew will be built into this directly 
+    ${IMGUI_SOURCES} ## and ImGui
     )
 
 ## Folder organisation
@@ -71,6 +91,7 @@ target_include_directories( SWater PRIVATE
     ${THE_ROOT}
     ${SDL2_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIR}
+    ${IMGUI_INCLUDE_DIR}
     ${STB_IMAGE_INCLUDE_DIR} )
 
 ## Link against SDL2 libs
