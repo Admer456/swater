@@ -34,3 +34,4 @@ packages/
 # build folder
 build/
 bin/SDL2.dll
+!extern/SDL2/lib/*
